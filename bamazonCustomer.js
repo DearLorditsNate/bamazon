@@ -39,16 +39,40 @@ Function Declarations
 function initialize() {
     connection.connect(function (err) {
         if (err) throw err;
-        connection.query(
-            "SELECT item_id, product_name, price, stock_quantity FROM products",
-            function (err, res) {
-                if (err) throw err;
-                for (var i = 0; i < res.length; i++) {
-                    console.log("ID: " + res[i].item_id + " || " + "Product: " + res[i].product_name + " || " + "Price: " + res[i].price);
-                }
-                prompt(res);
-            });
+        query();
     });
+}
+
+function query() {
+    connection.query(
+        "SELECT item_id, product_name, price, stock_quantity FROM products",
+        function (err, res) {
+            if (err) throw err;
+            for (var i = 0; i < res.length; i++) {
+                console.log("ID: " + res[i].item_id + " || " + "Product: " + res[i].product_name + " || " + "Price: " + res[i].price);
+            }
+            prompt(res);
+        });
+}
+
+function updateDatabase(response, answer) {
+    connection.query(
+      "UPDATE products SET ? WHERE ?",
+      [
+          {
+              stock_quantity:
+                  response[answer.item_id - 1].stock_quantity - answer.amount
+          },
+          {
+              item_id: answer.item_id
+          }
+      ],
+      function(err, res) {
+          console.log(
+            response[answer.item_id - 1].stock_quantity - answer.amount
+          );
+          console.log("Items affected: " + res.affectedRows);
+      });
 }
 
 function prompt(res) {
@@ -76,10 +100,11 @@ function prompt(res) {
         console.log(res[answer.item_id - 1].stock_quantity);
         if (answer.amount > res[answer.item_id - 1].stock_quantity) {
             console.log("Insufficient Quantity! Please place another order.");
-            initialize();
+            query();
         } else {
-            console.log("Success! Goodbye.");
+            updateDatabase(res, answer);
             connection.end();
+            console.log("Success! Goodbye.");
         }
     });
 }
