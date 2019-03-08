@@ -32,11 +32,11 @@ Global Varialbes
 connection.connect(function(err) {
     if (err) throw err;
     connection.query(
-        "SELECt * FROM products",
+        "SELECt item_id, product_name, price FROM products",
         function(err, res) {
             if (err) throw err;
             for (var i = 0; i < res.length; i++) {
-                console.log("Product: " + res[i].product_name + " || " + "Price: " + res[i].price + " || " + "Quantity in stock: " + res[i].stock_quantity + " || " + "Department: " + res[i].department_name);
+                console.log("ID: " + res[i].item_id + " || " + "Product: " + res[i].product_name + " || " + "Price: " + res[i].price);
             }
             connection.end();
         });
