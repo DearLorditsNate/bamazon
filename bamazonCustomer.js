@@ -72,6 +72,7 @@ function updateDatabase(response, answer) {
             response[answer.item_id - 1].stock_quantity - answer.amount
           );
           console.log("Items affected: " + res.affectedRows);
+          console.log("Your total cost was: " + (response[answer.item_id - 1].price * answer.amount));
       });
 }
 
