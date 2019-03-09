@@ -51,7 +51,7 @@ function query() {
             for (var i = 0; i < res.length; i++) {
                 console.log("ID: " + res[i].item_id + " || " + "Product: " + res[i].product_name + " || " + "Price: " + res[i].price);
             }
-            prompt(res);
+            welcome(res);
         });
 }
 
@@ -76,7 +76,7 @@ function updateDatabase(response, answer) {
       });
 }
 
-function prompt(res) {
+function welcome(res) {
     inquirer.prompt([
         {
             type: "input",
@@ -104,8 +104,28 @@ function prompt(res) {
             query();
         } else {
             updateDatabase(res, answer);
+            // connection.end();
+            // console.log("Success! Goodbye.");
+            followUp();
+        }
+    });
+}
+
+function followUp() {
+    inquirer.prompt([
+        {
+            type: "list",
+            choices: ["Yes", "No"],
+            message: "Would you like to buy anything else?",
+            name: "choice"
+        }
+    ]).then(answer => {
+        if (answer.choice === "Yes") {
+            // welcome();
+            query();
+        } else {
+            console.log("Ok, thanks for shopping at Bamazon!");
             connection.end();
-            console.log("Success! Goodbye.");
         }
     });
 }
