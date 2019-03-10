@@ -38,7 +38,7 @@ function initialize() {
 
 function query() {
     connection.query(
-        "SELECT item_id, product_name, price, stock_quantity FROM products",
+        "SELECT item_id, product_name, price, stock_quantity, product_sales FROM products",
         function (err, res) {
             if (err) throw err;
             console.log("\n");
@@ -59,7 +59,7 @@ function updateDatabase(response, answer) {
                   response[answer.item_id - 1].stock_quantity - answer.amount
           },
           {
-              product_sales: response[answer.item_id - 1].price * answer.amount
+              product_sales: response[answer.item_id - 1].product_sales + (response[answer.item_id - 1].price * answer.amount)
           },
           {
               item_id: answer.item_id
