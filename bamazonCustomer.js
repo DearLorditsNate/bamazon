@@ -104,28 +104,8 @@ function welcome(res) {
             query();
         } else {
             updateDatabase(res, answer);
-            // connection.end();
-            // console.log("Success! Goodbye.");
-            followUp();
-        }
-    });
-}
-
-function followUp() {
-    inquirer.prompt([
-        {
-            type: "list",
-            choices: ["Yes", "No"],
-            message: "Would you like to buy anything else?",
-            name: "choice"
-        }
-    ]).then(answer => {
-        if (answer.choice === "Yes") {
-            // welcome();
-            query();
-        } else {
-            console.log("Ok, thanks for shopping at Bamazon!");
             connection.end();
+            console.log("Thanks for shopping at Bamazon!");
         }
     });
 }
