@@ -25,13 +25,6 @@ var inquirer = require("inquirer");
 
 /*
 ===============================
-Global Varialbes
-===============================
-*/
-
-
-/*
-===============================
 Function Declarations
 ===============================
 */
@@ -48,9 +41,11 @@ function query() {
         "SELECT item_id, product_name, price, stock_quantity FROM products",
         function (err, res) {
             if (err) throw err;
+            console.log("\n");
             for (var i = 0; i < res.length; i++) {
                 console.log("ID: " + res[i].item_id + " || " + "Product: " + res[i].product_name + " || " + "Price: " + res[i].price);
             }
+            console.log("\n");
             welcome(res);
         });
 }
@@ -68,11 +63,7 @@ function updateDatabase(response, answer) {
           }
       ],
       function(err, res) {
-          console.log(
-            response[answer.item_id - 1].stock_quantity - answer.amount
-          );
-          console.log("Items affected: " + res.affectedRows);
-          console.log("Your total cost was: " + (response[answer.item_id - 1].price * answer.amount));
+          console.log("Your total cost was: $" + (response[answer.item_id - 1].price * answer.amount) + "\n");
       });
 }
 
@@ -96,16 +87,13 @@ function welcome(res) {
             name: "amount"
         }
     ]).then(answer => {
-        console.log(answer.item_id);
-        console.log(answer.amount);
-        console.log(res[answer.item_id - 1].stock_quantity);
         if (answer.amount > res[answer.item_id - 1].stock_quantity) {
             console.log("Insufficient Quantity! Please place another order.");
             query();
         } else {
             updateDatabase(res, answer);
             connection.end();
-            console.log("Thanks for shopping at Bamazon!");
+            console.log("\nThanks for shopping at Bamazon!");
         }
     });
 }
