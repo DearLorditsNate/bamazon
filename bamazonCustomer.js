@@ -52,11 +52,14 @@ function query() {
 
 function updateDatabase(response, answer) {
     connection.query(
-      "UPDATE products SET ? WHERE ?",
+      "UPDATE products SET ?, ? WHERE ?",
       [
           {
               stock_quantity:
                   response[answer.item_id - 1].stock_quantity - answer.amount
+          },
+          {
+              product_sales: response[answer.item_id - 1].price * answer.amount
           },
           {
               item_id: answer.item_id
