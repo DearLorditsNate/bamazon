@@ -52,11 +52,12 @@ function initialize() {
 
 function query(choice) {
     connection.query(
-        "SELECT item_id, product_name, price, stock_quantity FROM products",
-        function (err, res) {
-            if (err) throw err;
-            actions(choice, res);
-        }
+      "SELECT * FROM products JOIN departments ON products.department_name = departments.department_name",
+      function(err, res) {
+        if (err) throw err;
+        console.log(res);
+        // actions(choice, res);
+      }
     );
 }
 
@@ -78,7 +79,7 @@ function viewSales() {
 }
 
 function createDept() {
-    
+
 }
 
 /*
