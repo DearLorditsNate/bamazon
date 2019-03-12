@@ -23,6 +23,14 @@ var connection = mysql.createConnection({
 // Inquirer
 var inquirer = require("inquirer");
 
+// cli-table3
+var Table = require("cli-table3");
+
+var table = new Table({
+    head: ["Product ID", "Product", "Price"]
+    , colWidths: [15, 25, 18]
+});
+
 /*
 ===============================
 Function Declarations
@@ -43,8 +51,13 @@ function query() {
             if (err) throw err;
             console.log("\n");
             for (var i = 0; i < res.length; i++) {
-                console.log("ID: " + res[i].item_id + " || " + "Product: " + res[i].product_name + " || " + "Price: " + res[i].price);
+                table.push([
+                    res[i].item_id,
+                    res[i].product_name,
+                    res[i].price
+                ]);
             }
+            console.log(table.toString());
             console.log("\n");
             welcome(res);
         });
