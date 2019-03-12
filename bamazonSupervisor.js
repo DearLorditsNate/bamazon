@@ -56,17 +56,6 @@ function initialize() {
   });
 }
 
-// function query(choice) {
-//     connection.query(
-//       "SELECT * FROM products JOIN departments ON products.department_name = departments.department_name",
-//       function(err, res) {
-//         if (err) throw err;
-//         console.log(res);
-//         // actions(choice, res);
-//       }
-//     );
-// }
-
 function actions(answer, res) {
     switch (answer) {
         case "View Product Sales by Department":
@@ -86,6 +75,7 @@ function viewSales() {
     function(err, res) {
       if (err) throw err;
       for (var i = 0; i < res.length; i++) {
+        // Looks for null values in database and replaces them with 0 for display purposes
         if (res[i].sales === null) {
           res[i].sales = 0;
         }
@@ -99,7 +89,30 @@ function viewSales() {
 }
 
 function createDept() {
-
+  inquirer.prompt([
+    {
+      type: "input",
+      message: "Enter Department Name:",
+      name: "name"
+    },
+    {
+      type: "input",
+      message: "Enter Overhead Costs:",
+      name: "costs"
+    }
+  ]).then(answer => {
+    connection.query(
+      "INSERT INTO departments SET ?",
+      {
+        department_name: answer.name,
+        over_head_costs: parseInt(answer.costs)
+      },
+      function (err, res) {
+        if (err) throw err;
+        console.log("\nDepartment successfully added.\n");
+        connection.end();
+      });
+  });
 }
 
 /*
