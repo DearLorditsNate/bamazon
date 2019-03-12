@@ -1,4 +1,4 @@
-# bamazon
+# Bamazon
 
 A Node.js and MySQL CLI app that allows for interaction with a virtual store through three different Node.js interfaces: Customer, Manager, and Supervisor
 
