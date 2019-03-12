@@ -178,7 +178,7 @@ function addProduct() {
   inquirer.prompt([
     {
       type: "input",
-      message: "Enter Prodcut Name:",
+      message: "Enter Product Name:",
       name: "name"
     },
     {
