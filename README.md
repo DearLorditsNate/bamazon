@@ -24,4 +24,4 @@ A Node.js and MySQL CLI app that allows for interaction with a virtual store thr
 ## Workflow
 
 ### Video Demo
-[Bamazon Demo](https://youtu.be/Ru-dd_VgaQU)
+[Bamazon Demo](https://youtu.be/kiASpu2PJeo)
