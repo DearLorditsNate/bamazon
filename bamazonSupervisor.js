@@ -30,29 +30,30 @@ Function Declarations
 */
 
 function initialize() {
-    connection.connect(function (err) {
-        if (err) throw err;
-      connection.query(
-        "SET sql_mode = (SELECT REPLACE(@@sql_mode, 'ONLY_FULL_GROUP_BY', ''));"),
-        function(err, res) {
-          connection.end();
+  connection.connect(function (err) {
+    if (err) throw err;
+    // Sets MySQL mode to allow GROUP_BY to function properly
+    connection.query(
+      "SET sql_mode = (SELECT REPLACE(@@sql_mode, 'ONLY_FULL_GROUP_BY', ''));"),
+      function (err, res) {
+        connection.end();
+      }
+    inquirer
+      .prompt([
+        {
+          type: "list",
+          choices: [
+            "View Product Sales by Department",
+            "Create New Department"
+          ],
+          message: "Select an operation.",
+          name: "choice"
         }
-        inquirer
-          .prompt([
-            {
-              type: "list",
-              choices: [
-                "View Product Sales by Department",
-                "Create New Department"
-              ],
-              message: "Select an operation.",
-              name: "choice"
-            }
-          ])
-          .then(answer => {
-            actions(answer.choice);
-          });
-    });
+      ])
+      .then(answer => {
+        actions(answer.choice);
+      });
+  });
 }
 
 // function query(choice) {
@@ -81,10 +82,19 @@ function actions(answer, res) {
 
 function viewSales() {
   connection.query(
-    "SELECT departments.*, ANY_VALUE(departments.department_id) AS department, SUM(product_sales) AS sales, (SUM(product_sales) - departments.over_head_costs) AS total_profit FROM products RIGHT JOIN departments ON products.department_name = departments.department_name GROUP BY departments.department_name ORDER BY total_profit DESC;",
+    "SELECT departments.*, SUM(product_sales) AS sales, (SUM(product_sales) - departments.over_head_costs) AS total_profit FROM products RIGHT JOIN departments ON products.department_name = departments.department_name GROUP BY departments.department_name ORDER BY total_profit DESC;",
     function(err, res) {
       if (err) throw err;
-      console.log(res);
+      for (var i = 0; i < res.length; i++) {
+        if (res[i].sales === null) {
+          res[i].sales = 0;
+        }
+        if (res[i].total_profit === null) {
+          res[i].total_profit = 0;
+        }
+        console.log("Department ID: " + res[i].department_id + " || " + "Department Name: " + res[i].department_name + " || " + "Over Head Costs: " + res[i].over_head_costs + " || " + "Product Sales: " + res[i].sales + " || " + "Total Profit: " + res[i].total_profit);
+      }
+      connection.end();
     });
 }
 
