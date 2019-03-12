@@ -23,6 +23,14 @@ var connection = mysql.createConnection({
 // Inquirer
 var inquirer = require("inquirer");
 
+// cli-table3
+var Table = require("cli-table3");
+
+var table = new Table({
+  head: ["Department ID", "Department Name", "Overhead Costs", "Product Sales", "Total Profit"]
+  , colWidths: [15, 18, 18, 15, 15]
+});
+
 /*
 ===============================
 Function Declarations
@@ -82,8 +90,16 @@ function viewSales() {
         if (res[i].total_profit === null) {
           res[i].total_profit = 0;
         }
-        console.log("Department ID: " + res[i].department_id + " || " + "Department Name: " + res[i].department_name + " || " + "Over Head Costs: " + res[i].over_head_costs + " || " + "Product Sales: " + res[i].sales + " || " + "Total Profit: " + res[i].total_profit);
+
+        table.push([
+          res[i].department_id,
+          res[i].department_name,
+          res[i].over_head_costs,
+          res[i].sales,
+          res[i].total_profit
+        ]);
       }
+      console.log(table.toString());
       connection.end();
     });
 }
