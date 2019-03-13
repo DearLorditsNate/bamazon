@@ -26,11 +26,6 @@ var inquirer = require("inquirer");
 // cli-table3
 var Table = require("cli-table3");
 
-var table = new Table({
-  head: ["Product ID", "Product", "Price", "Quantity"]
-  , colWidths: [15, 25, 18, 15]
-});
-
 /*
 ===============================
 Function Declarations
@@ -94,6 +89,10 @@ function viewProducts() {
     "SELECT item_id, product_name, price, stock_quantity FROM products",
     function (err, res) {
       if (err) throw err;
+      var table = new Table({
+        head: ["Product ID", "Product", "Price", "Quantity"]
+        , colWidths: [15, 25, 18, 15]
+      });
       console.log("\n");
       for (var i = 0; i < res.length; i++) {
         table.push([
@@ -115,6 +114,10 @@ function viewLowInv() {
     "SELECT item_id, product_name, price, stock_quantity FROM products",
     function (err, res) {
       if (err) throw err;
+      var table = new Table({
+        head: ["Product ID", "Product", "Price", "Quantity"]
+        , colWidths: [15, 25, 18, 15]
+      });
       console.log("\n");
       for (var i = 0; i < res.length; i++) {
         if (res[i].stock_quantity < 5) {
